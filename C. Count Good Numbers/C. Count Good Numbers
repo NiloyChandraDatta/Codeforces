@@ -1,0 +1,60 @@
+// Count_Good_Numbers.cpp
+// https://codeforces.com/contest/2125/problem/C
+//-------= wheel method , periodicity
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<int> tbl(211);
+const int P = 210;
+const int CNT_IN_P = 48;
+
+void build_lookup()
+{
+    tbl[0] = 0;
+    for (int i = 1; i <= P; ++i)
+    {
+        tbl[i] = tbl[i - 1];
+        if (i % 2 != 0 && i % 3 != 0 && i % 5 != 0 && i % 7 != 0)
+        {
+            tbl[i]++;
+        }
+    }
+}
+
+long long count_up_to(long long n)
+{
+    if (n == 0)
+    {
+        return 0;
+    }
+    long long blocks = n / P;
+    long long tot = blocks * CNT_IN_P;
+    long long rem = n % P;
+    tot += tbl[rem];
+    return tot;
+}
+
+void solve()
+{
+    long long l, r;
+    cin >> l >> r;
+    cout << count_up_to(r) - count_up_to(l - 1) << endl;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    build_lookup();
+    
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        solve();
+    }
+    return 0;
+}
